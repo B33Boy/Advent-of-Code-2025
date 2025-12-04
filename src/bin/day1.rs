@@ -1,4 +1,3 @@
-use core::num;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 use std::path::Path;
@@ -14,7 +13,7 @@ fn main() -> io::Result<()> {
     let mut val = 50;
     let mut num_zeros = 0;
 
-    print!("Starting at 50\n");
+    println!("Starting at 50");
 
     for line_res in reader.lines() {
         let line_res = line_res?;
@@ -30,21 +29,21 @@ fn main() -> io::Result<()> {
         update2(&mut val, line, &mut num_zeros);
     }
 
-    print!("num_zeros: {num_zeros}\n");
+    println!("num_zeros: {num_zeros}");
 
     Ok(())
 }
 
 #[allow(dead_code)]
 fn update(val: &mut i32, line: &str) {
-    let delta = parse_dir(&line).unwrap() as i32;
+    let delta = parse_dir(line).unwrap() as i32;
     let mag: i32 = line[1..].trim().parse().ok().unwrap();
     *val = (*val + delta * mag).rem_euclid(100);
     println!("Delta: {}, updated val is {}", delta * mag, *val);
 }
 
 fn update2(val: &mut i32, line: &str, num_zeros: &mut i32) {
-    let dir = parse_dir(&line).unwrap() as i32;
+    let dir = parse_dir(line).unwrap() as i32;
     let mag: i32 = line[1..].trim().parse().ok().unwrap();
     let delta = dir * mag;
 
