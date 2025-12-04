@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug day1",
+      "cargo": {
+        "args": ["run", "--bin", "day1"],
+        "filter": {
+          "kind": "bin",
+          "name": "day1"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "RUST_BACKTRACE": "1"
+      },
+      "sourceLanguages": ["rust"]
+    }
+  ]
+}
