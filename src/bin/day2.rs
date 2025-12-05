@@ -68,7 +68,6 @@ fn is_valid(id: i64) -> bool {
     a != b
 }
 
-
 fn q2(line: &str) -> i64 {
     let ranges = get_ranges(&line);
     let mut total: i64 = 0;
@@ -96,20 +95,19 @@ fn is_valid2(id: i64) -> bool {
     let id_str = id.to_string();
     let id_len = id_str.len();
 
-    for win_size in 1..=(id_len/2) {
-        
+    for win_size in 1..=(id_len / 2) {
         // only consider win_sizes that evenly fit in (e.g. skip if string is of length 5 and win_size = 2)
-        if id_len % win_size != 0 {continue;} 
+        if id_len % win_size != 0 {
+            continue;
+        }
 
         let pattern = &id_str[..win_size];
         if pattern.repeat(id_len / win_size) == id_str {
-            return false; 
+            return false;
         }
     }
     true
 }
-
-
 
 #[cfg(test)]
 mod tests {
@@ -162,7 +160,7 @@ mod tests {
             (1010, false),
             (1188511885, false),
             (12, true),
-            (1000, true)
+            (1000, true),
         ];
 
         for case in cases {
