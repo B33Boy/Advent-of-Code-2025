@@ -14,13 +14,15 @@ static DIRS: &[(i32, i32)] = &[
 static ROWS: OnceLock<usize> = OnceLock::new();
 static COLS: OnceLock<usize> = OnceLock::new();
 
+type Grid = Vec<Vec<char>>;
+
 fn main() -> io::Result<()> {
     println!("--- Day 4 Solution ---");
 
     let path = Path::new("input/day4.txt");
     let contents = fs::read_to_string(path).unwrap();
 
-    let grid: Vec<Vec<char>> = contents
+    let mut grid: Grid = contents
         .lines()
         .map(|line| line.chars().collect())
         .collect();
@@ -31,8 +33,8 @@ fn main() -> io::Result<()> {
     println!("--- Part 1 ---");
     println!("{}", q1(&grid));
 
-    // println!("--- Part 2 ---");
-    // println!("{}", q2(&data));
+    println!("--- Part 2 ---");
+    println!("{}", q2(&mut grid));
 
     Ok(())
 }
@@ -45,7 +47,7 @@ fn get_cols() -> usize {
     *COLS.get().expect("COLS not initialized")
 }
 
-fn q1(grid: &[Vec<char>]) -> usize {
+fn q1(grid: &Grid) -> usize {
     let mut rolls = 0;
 
     for row in 0..get_cols() {
@@ -59,8 +61,7 @@ fn q1(grid: &[Vec<char>]) -> usize {
     rolls
 }
 
-fn can_access(grid: &[Vec<char>], row: usize, col: usize) -> bool {
-
+fn can_access(grid: &Grid, row: usize, col: usize) -> bool {
     if grid[row][col] != '@' {
         return false;
     }
@@ -89,4 +90,37 @@ fn can_access(grid: &[Vec<char>], row: usize, col: usize) -> bool {
     }
 
     count < 4
+}
+
+fn q2(grid: &mut Grid) -> usize {
+    let mut rolls = 0;
+
+    loop {
+        // Mark each (row,col) to remove
+        let mut idxs_to_rem: Vec<(usize, usize)> = Vec::new();
+
+        for row in 0..get_cols() {
+            for col in 0..get_rows() {
+                if can_access(grid, row, col) {
+                    idxs_to_rem.push((row, col));
+                }
+            }
+        }
+
+        // Remove each valid element and update counts
+        remove_idxs(grid, &idxs_to_rem);
+        rolls += idxs_to_rem.len();
+
+        if idxs_to_rem.is_empty() {
+            break;
+        }
+    }
+
+    rolls
+}
+
+fn remove_idxs(grid: &mut Grid, ids: &[(usize, usize)]) {
+    for &(row, col) in ids {
+        grid[row][col] = 'x';
+    }
 }
