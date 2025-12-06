@@ -19,7 +19,10 @@ fn main() -> io::Result<()> {
     }
 
     println!("--- Part 1 ---");
-    println!("Part 1: {}", q1(&data));
+    println!("{}", q1(&data));
+
+    println!("--- Part 2 ---");
+    println!("{}", q2(&data));
 
     Ok(())
 }
@@ -32,7 +35,7 @@ fn parse_line(s: &str) -> Vec<u8> {
         .collect()
 }
 
-fn q1(data: &Vec<Vec<u8>>) -> u32 {
+fn q1(data: &[Vec<u8>]) -> u32 {
     let total: u32 = data
         .iter()
         .map(|line| max_joltage(line))
@@ -41,21 +44,19 @@ fn q1(data: &Vec<Vec<u8>>) -> u32 {
 }
 
 fn max_joltage(line: &[u8]) -> u8 {
-
-    let (max_idx, max_elem) = first_max(&line);
+    let (max_idx, max_elem) = first_max(line);
 
     // Seek to the right first, but if it's at the end then seek to the left
     if max_idx != line.len() - 1 {
         // Search second largest max to the right
         let (_, max_elem2) = first_max(&line[max_idx + 1..]);
 
-        return max_elem * 10 + max_elem2;
-
+        max_elem * 10 + max_elem2
     } else {
         // Search second largest max to the left
         let (_, max_elem2) = first_max(&line[..max_idx]);
 
-        return max_elem2 * 10 + max_elem;
+        max_elem2 * 10 + max_elem
     }
 }
 
@@ -70,6 +71,39 @@ fn first_max(slice: &[u8]) -> (usize, u8) {
         }
     }
     (max_i, max_elem)
+}
+
+fn q2(data: &[Vec<u8>]) -> u64 {
+    let total: u64 = data
+        .iter()
+        .map(|line| max_joltage2(line))
+        .fold(0, |acc, x| acc + x as u64);
+    total
+}
+
+fn max_joltage2(line: &[u8]) -> u64 {
+    let mut st: Vec<u8> = Vec::new();
+
+    let mut remaining = line.len();
+    const N: usize = 12;
+
+    for &digit in line {
+        while let Some(&last) = st.last() {
+            if last < digit && st.len() - 1 + remaining >= N {
+                st.pop();
+            } else {
+                break;
+            }
+        }
+
+        if st.len() < N {
+            st.push(digit);
+        }
+        remaining -= 1;
+    }
+
+    let res = st.iter().fold(0u64, |acc, &d| acc * 10 + d as u64);
+    res
 }
 
 #[cfg(test)]
@@ -95,6 +129,32 @@ mod tests {
 
         for (line, expected) in cases {
             assert_eq!(expected, max_joltage(&line));
+        }
+    }
+
+    #[test]
+    fn test_max_joltage2() {
+        let cases = vec![
+            (
+                vec![9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1, 1, 1, 1, 1],
+                987654321111,
+            ),
+            (
+                vec![8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9],
+                811111111119,
+            ),
+            (
+                vec![2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 7, 8],
+                434234234278,
+            ),
+            (
+                vec![8, 1, 8, 1, 8, 1, 9, 1, 1, 1, 1, 2, 1, 1, 1],
+                888911112111,
+            ),
+        ];
+
+        for (line, expected) in cases {
+            assert_eq!(expected, max_joltage2(&line));
         }
     }
 
