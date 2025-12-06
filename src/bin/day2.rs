@@ -10,9 +10,9 @@ fn main() -> io::Result<()> {
         .trim()
         .to_string();
 
-    // println!("--- Part 1 ---");
-    // let sol1 = q1(&line);
-    // println!("sol1: {sol1}");
+    println!("--- Part 1 ---");
+    let sol1 = q1(&line);
+    println!("sol1: {sol1}");
 
     println!("--- Part 2 ---");
     let sol2 = q2(&line);
@@ -21,9 +21,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-#[allow(dead_code)]
 fn q1(line: &str) -> i64 {
-    let ranges = get_ranges(&line);
+    let ranges = get_ranges(line);
     let mut total: i64 = 0;
 
     for range in ranges {
@@ -58,7 +57,7 @@ fn is_valid(id: i64) -> bool {
     let id_str = id.to_string();
     let id_len = id_str.len();
 
-    if id_len % 2 != 0 {
+    if id_len.is_multiple_of(2) {
         // Odd number of characters can't be split in half
         return true;
     }
@@ -69,7 +68,7 @@ fn is_valid(id: i64) -> bool {
 }
 
 fn q2(line: &str) -> i64 {
-    let ranges = get_ranges(&line);
+    let ranges = get_ranges(line);
     let mut total: i64 = 0;
 
     for range in ranges {
@@ -97,7 +96,7 @@ fn is_valid2(id: i64) -> bool {
 
     for win_size in 1..=(id_len / 2) {
         // only consider win_sizes that evenly fit in (e.g. skip if string is of length 5 and win_size = 2)
-        if id_len % win_size != 0 {
+        if !id_len.is_multiple_of(win_size) {
             continue;
         }
 
