@@ -77,7 +77,7 @@ fn q2(data: &[Vec<u8>]) -> u64 {
     let total: u64 = data
         .iter()
         .map(|line| max_joltage2(line))
-        .fold(0, |acc, x| acc + x as u64);
+        .sum();
     total
 }
 
@@ -102,8 +102,7 @@ fn max_joltage2(line: &[u8]) -> u64 {
         remaining -= 1;
     }
 
-    let res = st.iter().fold(0u64, |acc, &d| acc * 10 + d as u64);
-    res
+    st.iter().fold(0u64, |acc, &d| acc * 10 + d as u64)
 }
 
 #[cfg(test)]
