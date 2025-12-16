@@ -15,6 +15,9 @@ fn main() -> io::Result<()> {
     println!("--- Part 1 ---");
     println!("{}", a1(&ranges, &mut lines));
 
+    println!("--- Part 2 ---");
+    println!("{}", a2(&ranges));
+
     Ok(())
 }
 
@@ -63,16 +66,16 @@ fn merge_ranges(ranges: &mut [(i64, i64)]) -> Vec<(i64, i64)> {
 }
 
 fn a1(ranges: &[(i64, i64)], lines: &mut io::Lines<BufReader<File>>) -> i64 {
-    let mut a1 = 0;
+    let mut cnt = 0;
 
     while let Some(Ok(line)) = lines.next() {
         let val = line.parse::<i64>().unwrap();
 
         if val_in_range(ranges, val) {
-            a1 += 1;
+            cnt += 1;
         }
     }
-    a1
+    cnt
 }
 
 fn val_in_range(ranges: &[(i64, i64)], val: i64) -> bool {
@@ -83,4 +86,15 @@ fn val_in_range(ranges: &[(i64, i64)], val: i64) -> bool {
     }
 
     false
+}
+
+
+fn a2(ranges: &[(i64, i64)]) -> i64 {
+    let mut cnt = 0;
+
+    for range in ranges {
+        cnt += range.1 - range.0 + 1;
+    }
+
+    cnt
 }
