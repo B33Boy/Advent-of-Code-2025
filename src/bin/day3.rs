@@ -74,10 +74,7 @@ fn first_max(slice: &[u8]) -> (usize, u8) {
 }
 
 fn q2(data: &[Vec<u8>]) -> u64 {
-    let total: u64 = data
-        .iter()
-        .map(|line| max_joltage2(line))
-        .sum();
+    let total: u64 = data.iter().map(|line| max_joltage2(line)).sum();
     total
 }
 

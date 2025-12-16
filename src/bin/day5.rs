@@ -88,7 +88,6 @@ fn val_in_range(ranges: &[(i64, i64)], val: i64) -> bool {
     false
 }
 
-
 fn a2(ranges: &[(i64, i64)]) -> i64 {
     let mut cnt = 0;
 
